@@ -8,11 +8,6 @@ typedef struct node
     struct node* right;
 }Node;
 
-Node *NewNode(int data);
-Node *InsertLeftNode(Node *root,int data);
-Node *InsertRightNode(Node *root,int data);
-void Inorder_traversal(Node *root);
-
 Node *NewNode(int data){
     Node *New_node = (Node*)malloc(sizeof(Node));
     New_node->data = data;
@@ -87,6 +82,31 @@ int get_height(Node *node){
     }
 }
 
+Node *SearchNode(Node *root,int data){
+    //Node* temp;
+
+    while(root!=NULL)
+    {
+        if(root->data == data)
+        {
+            return root;
+        }
+        else
+        {
+            Node* temp = SearchNode(root->left,data);
+            if(temp!=NULL) 
+            {
+                return temp;
+            }else
+            {
+                temp = SearchNode(root->right,data);
+                return temp;
+            }
+        }
+    }
+   return NULL;
+}
+
 int main()
 {
     //               6
@@ -107,12 +127,22 @@ int main()
 
     printf("Inorder traversal : \n");
     Inorder_traversal(root);
+    printf("\n");
     printf("Preorder traversal : \n");
     Preorder_traversal(root);
+    printf("\n");
     printf("Postorder traversal : \n");
     Postorder_traversal(root);
     printf("\n");
     int height = get_height(root);
     printf("Tree height : %d\n",height);
+    Node *NodeDetected = SearchNode(root,9);
+    if(NodeDetected!=NULL)
+    {
+        printf("find noed , data : %d\n",NodeDetected->data);
+    }else
+    {
+        printf("Not found in tree!\n");
+    }
     return 0;
 }

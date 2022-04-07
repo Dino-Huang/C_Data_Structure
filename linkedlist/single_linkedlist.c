@@ -63,7 +63,6 @@ int display_list(Linked_list *list){
 int main(){
     Linked_list *list;
     list = push_node(list,1);
-    printf("%d",list->data);
     list = push_node(list,2);
     list = push_node(list,3);
     list = push_node(list,4);

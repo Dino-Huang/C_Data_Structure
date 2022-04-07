@@ -22,7 +22,7 @@ int main(){
     sum.feet=p1.feet+p2.feet;
     sum.inch=p1.inch+p2.inch;
     printf("sum of p1 and p2:\n");
-    printf("feet : %d",sum.feet);
-    printf("inch : %f",sum.inch);
+    printf("feet : %d\n",sum.feet);
+    printf("inch : %.1f\n",sum.inch);
     return 0;
 }

@@ -18,7 +18,7 @@ int main(){
     printf("display info:\n");
     printf("student name : %s\n",s.name);
     printf("student roll numbers : %d\n",s.roll);
-    printf("student marks : %.2f\n",s.marks);
+    printf("student marks : %.1f\n",s.marks);
 
     return 0;
 }
