@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
+#include<math.h>
 
 typedef struct node
 {
@@ -69,10 +71,10 @@ int get_max(int a,int b){
 
 int get_height(Node *node){
     int left_h=0,right_h=0,max;
-    //if a is null or leaf, then height = 1
-    if(node == NULL || Isleaf(node))
+    //if tree is null then height = 1
+    if(node == NULL)
     {
-        return 1;
+        return 0;
     }else
     {
         left_h = get_height(node->left);
@@ -107,23 +109,119 @@ Node *SearchNode(Node *root,int data){
    return NULL;
 }
 
+bool IsFullBinaryTree(Node *root){
+    /* A full Binary tree is a special type of binary tree
+       in which every parent node/internal node has either 
+       two or no children.
+    */
+    if(root == NULL)
+    {
+        return true;
+    }
+
+    if(root->left==NULL && root->right==NULL)
+    {
+        return true;
+    }
+    if((root->left) && (root->right))
+    {
+        return (IsFullBinaryTree(root->left)&&IsFullBinaryTree(root->right));
+    }
+    return false;
+}
+
+int count_of_nodes(Node *root){
+    if(root == NULL)
+        return 0;
+    // number of nodes = root + number of nodes of left subtree
+    //                        + number of nodes of right subtree    
+    return 1+count_of_nodes(root->left)+count_of_nodes(root->right);
+}
+
+bool IsPerfectBinaryTree(Node *root){
+    /*
+       A perfect binary tree is a type of binary tree in which
+       every internal node has exactly two child nodes and all 
+       the leaf nodes are at the same level.
+    */
+
+    // if a tree is perfect then number of nodes = pow(2,h-1)
+
+    if(root->left == NULL && root->right == NULL)
+    {
+        return true;
+    }
+    printf("height of tree : %d\n",get_height(root));
+    printf("nodes of tree : %d\n",count_of_nodes(root));
+    return (pow(2,get_height(root))-1 == count_of_nodes(root));
+    
+}
+
+bool IsCompleteBinaryTree(Node *root,int index,int number_nodes)
+{
+    /* 1.All the nodes on last level must lean towards the left.
+       2.The last leaf element might not have a right sibling 
+       i.e. a complete binary tree doesn't have to be a full binary tree.
+    */
+   // Check if the tree is complete
+    // An empty tree is complete
+    if (root == NULL)
+        return (true);
+ 
+    // If index assigned to current node is more than
+    // number of nodes in tree, then tree is not complete
+    if (index >= number_nodes)
+        return (false);
+ 
+    // Recur for left and right subtrees
+    return (IsCompleteBinaryTree(root->left, 2*index + 1, number_nodes) &&
+            IsCompleteBinaryTree(root->right, 2*index + 2, number_nodes));
+}
+
+int IsBalancedBinaryTree(Node *root){
+    /*
+    An empty tree is height-balanced. 
+    A non-empty binary tree T is balanced if: 
+      1) Left subtree of T is balanced 
+      2) Right subtree of T is balanced 
+      3) The difference between heights of left subtree and right subtree is not more than 1. 
+    */
+    int lh; /* for height of left subtree */
+    int rh; /* for height of right subtree */
+ 
+    /* If tree is empty then return true */
+    if (root == NULL)
+        return 1;
+ 
+    /* Get the height of left and right sub trees */
+    lh = get_height(root->left);
+    rh = get_height(root->right);
+   
+
+    if ((abs(lh - rh) <= 1) && IsBalancedBinaryTree(root->left)&& IsBalancedBinaryTree(root->right))
+        return 1;
+ 
+    /* If we reach here then tree is not height-balanced */
+    return 0;
+}
+
 int main()
 {
-    //               6
+    //               1
     //              / \
-    //             4   7
-    //            / \   \
-    //           3   5   8
+    //             2   3
+    //            /\   /\
+    //           4  5 6 
+    //          /
+    //         7
     
-    Node* root = NewNode(6);
-
-    root->left = InsertLeftNode(root,4);
-    root->right = InsertRightNode(root,7);
-
-    root->left->left = InsertLeftNode(root->left,3);
-    root->left->right = InsertRightNode(root->left,5);
-
-    root->right->right = InsertRightNode(root->right,8);
+    Node* root = NewNode(1);
+	root->left = NewNode(2);
+    root->right = NewNode(3);
+    //root->left->left = NewNode(4);
+    root->left->right = NewNode(5);
+    //root->right->left = NewNode(6);
+    //root->left->left->left = NewNode(7);
 
     printf("Inorder traversal : \n");
     Inorder_traversal(root);
@@ -143,6 +241,37 @@ int main()
     }else
     {
         printf("Not found in tree!\n");
+    }
+    if(IsFullBinaryTree(root))
+    {
+        printf("Tree is full binary tree!\n");
+    }else
+    {
+        printf("Tree is not full binary tree!\n");
+    }
+    if(IsPerfectBinaryTree(root))
+    {
+        printf("Tree is perfect binary tree!\n");
+    }else
+    {
+        printf("Tree is not perfect binary tree!\n");
+    }
+    int h=count_of_nodes(root);
+    int index = 0;
+    if(IsCompleteBinaryTree(root,index,h))
+    {
+        printf("Tree is complete binary tree!\n");
+    }else
+    {
+        printf("Tree is not complete binary tree!\n");
+    }
+
+    if(IsBalancedBinaryTree(root))
+    {
+        printf("Tree is balanced binary tree!\n");
+    }else
+    {
+        printf("Tree is not balanced binary tree!\n");
     }
     return 0;
 }
