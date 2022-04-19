@@ -71,7 +71,7 @@ int get_max(int a,int b){
 
 int get_height(Node *node){
     int left_h=0,right_h=0,max;
-    //if tree is null then height = 1
+    //if tree is null then height = 0
     if(node == NULL)
     {
         return 0;

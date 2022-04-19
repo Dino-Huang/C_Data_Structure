@@ -167,6 +167,42 @@ Llist_node *Display_list(Llist_node *list){
     return list;
 }
 
+Llist_node *Reverse(Llist_node *list){
+    if (list == NULL) return list;
+    Llist_node *prev = NULL;
+    Llist_node *temp;
+    Llist_node *curr = list;
+
+    while (curr!=NULL)
+    {
+        temp = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = temp;
+    }
+    return prev;
+    
+}
+
+Llist_node *ReverseLlist(Llist_node *list){
+    Llist_node* curr = list,*prev,*next;
+    prev = NULL;
+    next = NULL;
+    while (curr!=NULL)
+    {
+        // Before changing next of current, 
+        // store next node
+        next = curr->next;
+        // Now change next of current 
+        // This is where actual reversing happens 
+        curr->next = prev;
+        // Move prev and curr one step forward 
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
 int main(){
     //initialize nodes
     Llist_node *head = NULL;
@@ -182,6 +218,9 @@ int main(){
     printf("The node is found at position %d\n",index);
     head=SortLlist(head);
     Display_list(head);
-    
+    head = ReverseLlist(head);
+    Display_list(head);
+    head = Reverse(head);
+    Display_list(head);
     return 0;
 }

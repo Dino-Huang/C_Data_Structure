@@ -7,7 +7,7 @@ typedef struct list_node{
 }Linked_list;
 
 Linked_list *new_node(int data){
-    Linked_list *node;
+    Linked_list *node=NULL;
     //dynamic memory allocation
     node=(Linked_list *)malloc(sizeof(Linked_list));
     //memory is not enough
@@ -36,16 +36,18 @@ Linked_list *delete_node(Linked_list *list,int key){
 
     if (temp != NULL && temp->data==key)
     {
-        list->next=temp->next;
+        list=temp->next;
         free(temp);
         return list;
     }
-    while(temp->data!= NULL && temp->data!=key){
+    while( temp->data!=key){
         prev = temp;//store previous ptr
         temp=temp->next;// point to next ptr
-
     }
-    
+    prev->next=temp->next;
+    free(temp);
+    free(prev);
+    return list;
 }
 
 int display_list(Linked_list *list){
@@ -68,6 +70,9 @@ int main(){
     list = push_node(list,4);
     list = push_node(list,5);
     
+    display_list(list);
+    //list=delete_node(list,1);
+    list=delete_node(list,2);
     display_list(list);
     return 0;
 }
