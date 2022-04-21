@@ -32,7 +32,7 @@ void FindEntry(unsigned int DATA_A,unsigned int DATA_B)
     int Prev_entry = Null;
     int Next_entry = Null;
 
-    while(Found_entry!= Null)
+    while(list_array[Found_entry].NextPtr!= Null)
     {
         printf("list_array[%d].DataH = %d\n",Found_entry,list_array[Found_entry].DataH);
         printf("list_array[%d].DataL = %d\n",Found_entry,list_array[Found_entry].DataL);
@@ -40,7 +40,7 @@ void FindEntry(unsigned int DATA_A,unsigned int DATA_B)
         if(list_array[Found_entry].DataH == DATA_A && list_array[Found_entry].DataL == DATA_B)
         {
             // if find in first entry
-            if(Found_entry == Null) {
+            if(Prev_entry == Null) {
                 printf("found entry = listhead, prev entry = Null\n ");
                 break;
             }else{
@@ -83,7 +83,7 @@ int main()
     list_array[5].DataL   = 4;
     list_array[5].NextPtr = 6;
     unsigned int a = 1;
-    unsigned int b = 5;
+    unsigned int b = 2;
     FindEntry(a,b);
 
     return 0;
