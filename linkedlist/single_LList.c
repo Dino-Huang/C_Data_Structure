@@ -158,6 +158,57 @@ Llist_node *SortLlist(Llist_node *list){
 
 }
 
+Llist_node *BubbleSortLlist(Llist_node *head){
+  Llist_node *cur = head;
+  Llist_node *index ;
+  int temp;
+
+  if (cur== NULL)
+  {
+      printf("It's empty list!\n");
+      return cur;
+  }
+  while (cur != NULL)
+  {
+      index = cur->next;
+      while (index != NULL)
+      {
+          if(index->data < cur->data )
+          {
+              temp = cur->data;
+              cur->data = index->data;
+              index->data = temp;
+          }
+          index = index->next;
+      }
+      cur = cur->next;
+  }
+  return head;
+}
+
+Llist_node *SelectionSortLlist(Llist_node *head)
+{
+    Llist_node *p,*q;
+    p = head;
+    
+    while(p!= NULL)
+    {
+        q = p->next;
+        while(q != NULL)
+        {
+            if(q->data > p->data)
+            {
+                int k = q->data;
+                q->data = p->data;
+                p->data = k;
+            }
+            q = q->next;
+        }
+        p = p->next;
+    }
+    return head;
+}
+
 Llist_node *Display_list(Llist_node *list){
     while (list!=NULL){
         printf("%d -> ",list->data);

@@ -2,7 +2,8 @@
   "files.associations": {
     "complex": "c",
     "__node_handle": "c",
-    "stdbool.h": "c"
+    "stdbool.h": "c",
+    "chrono": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/clang",
   "C_Cpp_Runner.cppCompilerPath": "/usr/bin/clang++",

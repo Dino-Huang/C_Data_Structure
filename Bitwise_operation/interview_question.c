@@ -39,7 +39,11 @@ bit(LSB // Least Significant Bit)
 */
 // tips : do value&(-value) then find MSB
 // -x(minus) = ~x + 1 
-// if given is 0001 0001, ~x = -(x + 1) = - 0001 0010 
+// if given is 0001 0001, ~(x-1) = ~(0001 0000) = 1110 1111
+//    0001 0001
+//  & 1110 1111
+//-------------
+//  = 0000 0001 => only LSB is set
 int Find_LSB(unsigned char value){
     return value &= (-value);
 }
