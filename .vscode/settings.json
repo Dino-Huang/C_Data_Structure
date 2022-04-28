@@ -3,7 +3,13 @@
     "complex": "c",
     "__node_handle": "c",
     "stdbool.h": "c",
-    "chrono": "c"
+    "chrono": "c",
+    "__split_buffer": "c",
+    "array": "c",
+    "string_view": "c",
+    "vector": "c",
+    "math.h": "c",
+    "cstddef": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/clang",
   "C_Cpp_Runner.cppCompilerPath": "/usr/bin/clang++",

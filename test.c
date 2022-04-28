@@ -1,170 +1,124 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
-typedef struct node
-{
-    int data;
-    struct node *next;
-}Linkedlist;
+/*
+1.實作 SetBit/ClearBit/CheckBit/FlipBit
+2.實作一函示能夠交換兩數字且不使用額外變數
+3.尋找最高為元為1的值(MSB) 與最低位元為1的值(LSB)與其位於第幾個bit
+4.給一個數值，求其有多少個bit為1?
+5.給一個數值，求其是否為2的n次方
+6.給你一個unsigned short(2bytes 16 bit)，問換算成16進制後四個值是不是一樣
+，是回傳1，否則0 例如：0xFFFF return 1, 0xAAAB return 0
+*/
 
-Linkedlist *InsertNode(Linkedlist *head, int data)
-{
-    Linkedlist *NewNode ;
-    NewNode = (Linkedlist *) malloc(sizeof(Linkedlist));
-    NewNode->data = data;
-    NewNode->next = NULL;
+#define Set_Bit(a,n) ( a |= (1<<n) )
+#define ClearBit(a,n) (a &= (~(1<<n)))
+#define CheckBit(a,n) ((a&(1<<n)? 'Y':'N'))
+#define FlipBit(a,n) ( a^=(1<<n)) //1^1 = 0 0 ^1=1
+#define PrintBinary(a) \
+    ( a & (1<<7) ? '1' : '0' ), \
+    ( a & (1<<6) ? '1' : '0' ), \
+    ( a & (1<<5) ? '1' : '0' ), \
+    ( a & (1<<4) ? '1' : '0' ), \
+    ( a & (1<<3) ? '1' : '0' ), \
+    ( a & (1<<2) ? '1' : '0' ), \
+    ( a & (1<<1) ? '1' : '0' ), \
+    ( a & (1<<0) ? '1' : '0' )
 
-    if (head==NULL)
-    {
-        head = NewNode;
-        return head;
+int FindMSB(unsigned char n){
+    if(n==0) return -1;
+    n|=(n>>1);
+    n|=(n>>2);
+    n|=(n>>4);
+    return n-(n>>1);
+}
+
+int FindMSB2(unsigned char n){
+    int index =7;
+    while((n&(1<<index))==0){
+        index--;
     }
+    return (1<<index);
+}
 
-    Linkedlist *temp = head; ;
-    //head os not empty
-    while(temp->next!= NULL)
+int FindLSB(unsigned char n){
+    return n&(-n);
+}
+
+void Swap(int *a, int *b){
+    *a = *a ^ *b;
+    *b = *a ^ *b;// b = a
+    *a = *a ^ *b;//a = b
+}
+
+int NumOfBit(unsigned char x){
+    int n = 0;
+    for (int i = 7; i >=0; i--)
     {
-        //head move forward
-        temp = temp->next;
-    }
-    temp->next= NewNode;
-    
-    return head;
-}
-
-Linkedlist *RemoveNode(Linkedlist *head,int data)
-{
-    Linkedlist *cur = head;
-    Linkedlist *prev;
-
-    if(cur==NULL) return cur;
-    while(cur->data!=data)
-    {
-        prev = cur;
-        cur = cur->next;
-    }
-    prev->next = cur->next;
-    free(cur);
-
-    return head;
-}
-
-Linkedlist *ReverseLlist(Linkedlist*head)
-{
-    Linkedlist *cur = head;
-    Linkedlist *prev = NULL, *next;
-
-    while (cur!=NULL)
-    {
-        next = cur->next;
-        cur->next = prev;
-        prev = cur;
-        cur =next;
-    }
-    
-
-    return prev;
-}
-
-void Swap(int *a,int *b){
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-Linkedlist *BubbleSortLlist(Linkedlist *head){
-  Linkedlist *cur = head;
-  Linkedlist *index ;
-  int temp;
-
-  if (cur== NULL)
-  {
-      printf("It's empty list!\n");
-      return cur;
-  }
-  while (cur != NULL)
-  {
-      index = cur->next;
-      while (index != NULL)
-      {
-          if(index->data < cur->data )
-          {
-              temp = cur->data;
-              cur->data = index->data;
-              index->data = temp;
-          }
-          index = index->next;
-      }
-      cur = cur->next;
-  }
-  return head;
-}
-
-Linkedlist *SelectionSortLlist(Linkedlist *head)
-{
-    Linkedlist *p,*q;
-    p = head;
-    
-    while(p!= NULL)
-    {
-        q = p->next;
-        while(q != NULL)
-        {
-            if(q->data > p->data)
-            {
-                int k = q->data;
-                q->data = p->data;
-                p->data = k;
-            }
-            q = q->next;
+        if( x&(1<<i) ){
+            n++;
         }
-        p = p->next;
     }
-    return head;
+    return n;
 }
 
-void PrintList(Linkedlist *head)
-{
-    Linkedlist *temp = head;
-    if(temp == NULL){
-        printf("It's empty list!\n");
-        return;
-    }
-    while(temp!=NULL)
+char IsPowerof2(unsigned char x){
+    if((x&(x-1))==0)
     {
-        printf("%d->",temp->data);
-        temp = temp->next;
+        return 'Y';
+    }else return 'N';
+}
+
+char hexadecimal(unsigned short int a)
+{
+    //if a = 0x1110 = 0001 0001 0001 0000 
+    //using mask = first 4 bits or last 4 bits
+    unsigned short mask = (a>>12);
+    mask = mask+(mask<<4)+(mask<<8)+(mask<<12);
+    if(a==mask) {
+        return 'Y';
+    }else{
+        return 'N';
     }
-    printf("Null\n");
+}
+
+char hexadecimal2(unsigned short int  a){
+    if(((a^(unsigned short int)(a<<4)))>>4==0){
+        return 'Y';
+    }else{
+        return 'N';
+    }
+}
+
+char IsPrimeNumber(unsigned int a){
+    if( a<2) return 'N';
+    for (int i = 2; i<(a/2);i++)
+    {
+        if((a%i)==0)return 'N';
+    }
+    return 'Y';
 }
 
 int main()
 {
-    Linkedlist *head = NULL;
-    head = InsertNode(head,1);
-    head = InsertNode(head,4);
-    head = InsertNode(head,3);
-    head = InsertNode(head,2);
-    head = InsertNode(head,5);
-    printf("Original Llist : ");
-    PrintList(head);
-    head = RemoveNode(head,2);
-    printf("Llist after removing data %d : ",2);
-    PrintList(head);
-    head = ReverseLlist(head);
-    printf("Reverse Llist : ");
-    PrintList(head);
-    head = BubbleSortLlist(head);
-    printf("BubbleSort Llist : ");
-    PrintList(head);
-    head = SelectionSortLlist(head);
-    printf("SelectionSort Llist : ");
-    PrintList(head);
-
-    char a[]="sa";
-    int *p =(int*)a;
-    //printf("%c\n",*p+1);
-    printf("%c",*p++);
+    unsigned char a = 0b00000000;
+    Set_Bit(a,1);
+    printf("Binary : %c%c%c%c%c%c%c%c\n",PrintBinary(a));
+    FlipBit(a,3);
+    printf("Binary : %c%c%c%c%c%c%c%c\n",PrintBinary(a));
+    printf("MSB : %d\n",FindMSB2(a));
+    printf("LSB : %d\n",FindLSB(a));
+    int x = 3, y=1;
+    printf("x:%d y:%d\n",x,y);
+    Swap(&x,&y);
+    printf("x:%d y:%d\n",x,y);
+    printf("Num : %d\n",NumOfBit(a));
+    printf("a is power of 2 : %c\n",IsPowerof2(a));
+    unsigned short int h = 0x1111;
+    printf("hexademical of a is the same : %c\n",hexadecimal2(h));
+    int num = 1;
+    printf("Is %d a prime number : %c \n",num,IsPrimeNumber(num));
     return 0;
 }
+

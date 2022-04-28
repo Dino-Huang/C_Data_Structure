@@ -1,74 +1,94 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
-#include<limits.h>
+// practice stack implementation
+// sstack follows LIFO rule
 
-#define EmptyStack INT_MIN
-
-typedef struct node{
+typedef struct stack_node{
     int data;
-    struct node *next;
-}Node;
+    struct stack_node *next;
+}Stack_node;
 
+typedef struct stack_list{
+    Stack_node *stack_top;
+}Stack_list;
 
-
-Node *Push(Node *st,int data){
-    Node *newnode = (Node* )malloc(sizeof(Node));
-    if(newnode==NULL) return false;
-    newnode->data = data;
-    newnode->next = st;
-    st = newnode;
-    return st;
-}
-
-bool IsEmpty(Node *st){
-    if(st == NULL) 
+bool IsEmpty(Stack_list *stack)
+{
+    if (stack->stack_top == NULL)
     {
-        printf("Empty!\n");
         return true;
-    }
-    else
-    {
-        //printf("not empty!\n");
-        return false;
-    }
+    }else return 0;
 }
 
-
-
-int Pop(Node **st){
-    Node *temp; 
-    temp = &(**st);
-    int result; 
-
-    if(IsEmpty(temp)) {
-        printf("the stack is empty!\n");
-        return INT_MIN;
+Stack_list *Push(Stack_list *stack, int data){
+    Stack_node *new_node ;
+    new_node = (Stack_node *)malloc(sizeof(Stack_node));
+    new_node->data = data;
+    new_node->next = NULL;
+    
+    if(IsEmpty(stack))
+    {
+        stack->stack_top = new_node;
     }else
     {
-        int result = temp->data;
-        *st=(*st)->next;
-        free(temp);
-        return result;
+        // insert at front
+        new_node->next = stack->stack_top;
     }
+    stack->stack_top = new_node;
+    return stack;
 }
 
-void PrintStack(Node *st){
-    int result ;
-    while(!IsEmpty(st))
+Stack_list *Pop(Stack_list *stack)
+{
+    Stack_node *temp;
+    if (IsEmpty(stack))
     {
-        printf("Pop : %d\n",Pop(&st));
+        printf("Stack is empty to Pop!\n");
+    }else
+    {
+        temp = stack->stack_top;
+        printf("Pop stack : %d\n",temp->data);
+        stack->stack_top =stack->stack_top->next;
+        free(temp);
+    }
+    return stack;
+}
+
+void PrintStack(Stack_list * stack){
+    if(stack->stack_top == NULL)
+    {
+        printf("Stack is empty!\n");
+    }else
+    {
+        Stack_node *temp = stack->stack_top;
+        while (temp!=NULL)
+        {
+            printf("%d\n",temp->data);
+            temp = temp->next;
+        }
+        free(temp);
     }
 }
 
-int main(){
-    Node *st = NULL;
-    st = Push(st,1);
-    st = Push(st,2); 
-    st = Push(st,3);
-    st = Push(st,4);
-    PrintStack(st);    
-   
+int main()
+{
+    //creat stack
+    Stack_list *stack;
+    stack = (Stack_list*)malloc(sizeof(Stack_list));
+    printf("Original stack : \n");
+    stack = Push(stack,1);
+    stack = Push(stack,2);
+    stack = Push(stack,3);
+    stack = Push(stack,4);
+    stack = Push(stack,5);
+    PrintStack(stack);
+    printf("Stack after Pop : \n");
+    stack = Pop(stack);
+    PrintStack(stack);
+    printf("Stack after Pop : \n");
+    stack = Pop(stack);
+    PrintStack(stack);
 
-
+    return 0;
 }
